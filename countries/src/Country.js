@@ -1,13 +1,21 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-console.log(process.env.REACT_APP_API_KEY, 'REACT_APP_API_KEY');
+require('dotenv').config();
 
 const Country = ({ item }) => {
-	const getWeather = axios
-		.get(`http://api.weatherstack.com/current?access_key='process.env.REACT_APP_API_KEY'&query=${item.capital}`)
-		.then((response) => {
-			console.log(response.data);
-		});
+	const [ weather, setWeather ] = useState({});
+	const api_key = process.env.REACT_APP_API_KEY;
+
+	useEffect(
+		() => {
+			axios
+				.get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${item.capital}`)
+				.then((response) => {
+					setWeather(response.data);
+				});
+		},
+		[ item.capital, api_key ]
+	);
 
 	return (
 		<div>
@@ -24,7 +32,7 @@ const Country = ({ item }) => {
 			</ul>
 			<img src={item.flag} style={{ width: '20vw' }} alt="Country Flag" />
 			<h1>Weather in {item.capital}</h1>
-			<p>Temperature : </p>
+			<p>Temperature : '5deg'</p>
 		</div>
 	);
 };

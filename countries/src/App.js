@@ -17,8 +17,8 @@ function App() {
 		setSearch(e.target.value);
 	};
 
-	const handleShowClick = (e) => {
-		setCountryDetail(e.target.value);
+	const handleShowClick = (name) => {
+		setCountryDetail(name);
 	};
 
 	const filterCountries = countries.filter((country) => country.name.toLowerCase().includes(search.toLowerCase()));
@@ -33,14 +33,14 @@ function App() {
 			{limitCountryDisplay ? (
 				'Too many matches, specify another filter'
 			) : (
-				filterCountries.map((item, i) => {
+				filterCountries.map((item) => {
 					if (filterCountries.length === 1) {
 						return <div key={item.alpha3Code}>{<Country item={item} />}</div>;
 					}
 					return (
 						<div>
 							<p key={item.alpha3Code}>{item.name}</p>{' '}
-							<button value={item.name} onClick={handleShowClick}>
+							<button value={item.name} onClick={() => handleShowClick(item.name)}>
 								show
 							</button>
 						</div>
