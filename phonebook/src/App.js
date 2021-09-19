@@ -4,6 +4,8 @@ import Search from './Search';
 import Persons from './Persons';
 import axios from 'axios';
 
+import memberService from './services/members';
+
 const App = () => {
 	const [ persons, setPersons ] = useState([]);
 	const [ newName, setNewName ] = useState('');
@@ -24,8 +26,21 @@ const App = () => {
 		});
 
 		if (namesArray.includes(newName)) {
-			alert(`${newName} is already added to the phonebook`);
+			alert(`${newName} is already added to the phonebook, replace the old number with a new one?`);
+			const findId = async () => {
+				const result = await axios
+					.get(`http://localhost:3001/persons`)
+					.then((response) => response.data.filter((item) => item.name === newName));
+				memberService.updatePerson(result[0].id, { name: newName, number: newNumber });
+				for (let item of persons) {
+					if (item.name === newName) {
+						// setPersons([ ...persons, {item.number = newNumber});
+					}
+				}
+			};
+			findId();
 		} else {
+			memberService.createPerson({ name: newName, number: newNumber });
 			setPersons([ ...persons, { name: newName, number: newNumber } ]);
 		}
 		setNewName('');
@@ -44,8 +59,10 @@ const App = () => {
 		setFilterName(e.target.value.toLowerCase());
 	};
 
-	// const namesToShow = persons.filter((item) => item.name.includes(filterName));
-
+	const handleDeleteRender = (id) => {
+		setPersons([ ...persons.filter((item) => item.id !== id) ]);
+	};
+	console.log(persons, 'PERSONS');
 	return (
 		<div>
 			<h1>Phonebook</h1>
@@ -59,7 +76,7 @@ const App = () => {
 				handleSubmit={handleSubmit}
 			/>
 			<h2>Numbers</h2>
-			<Persons filterName={filterName} persons={persons} />
+			<Persons filterName={filterName} persons={persons} handleDeleteRender={handleDeleteRender} />
 		</div>
 	);
 };
