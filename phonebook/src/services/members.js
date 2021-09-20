@@ -17,9 +17,11 @@ const deletePerson = (id) => {
 	axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
 };
 
-export default {
+const exported = {
 	getAllPersons,
 	createPerson,
 	updatePerson,
 	deletePerson
 };
+
+export default exported;

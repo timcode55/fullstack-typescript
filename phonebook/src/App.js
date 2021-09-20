@@ -11,12 +11,16 @@ const App = () => {
 	const [ newName, setNewName ] = useState('');
 	const [ newNumber, setNewNumber ] = useState('');
 	const [ filterName, setFilterName ] = useState('');
+	const [ updateRender, setUpdateRender ] = useState(false);
 
-	useEffect(() => {
-		axios.get('http://localhost:3001/persons').then((response) => {
-			setPersons(response.data);
-		});
-	}, []);
+	useEffect(
+		() => {
+			axios.get('http://localhost:3001/persons').then((response) => {
+				setPersons(response.data);
+			});
+		},
+		[ updateRender ]
+	);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -32,11 +36,7 @@ const App = () => {
 					.get(`http://localhost:3001/persons`)
 					.then((response) => response.data.filter((item) => item.name === newName));
 				memberService.updatePerson(result[0].id, { name: newName, number: newNumber });
-				for (let item of persons) {
-					if (item.name === newName) {
-						// setPersons([ ...persons, {item.number = newNumber});
-					}
-				}
+				setUpdateRender(() => !updateRender);
 			};
 			findId();
 		} else {
@@ -62,7 +62,7 @@ const App = () => {
 	const handleDeleteRender = (id) => {
 		setPersons([ ...persons.filter((item) => item.id !== id) ]);
 	};
-	console.log(persons, 'PERSONS');
+
 	return (
 		<div>
 			<h1>Phonebook</h1>
