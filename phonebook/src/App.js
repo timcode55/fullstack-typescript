@@ -75,7 +75,7 @@ const App = () => {
 				handleAddNumber={handleAddNumber}
 				handleSubmit={handleSubmit}
 			/>
-			<h2>Numbers</h2>
+			<h1>Numbers</h1>
 			<Persons filterName={filterName} persons={persons} handleDeleteRender={handleDeleteRender} />
 		</div>
 	);

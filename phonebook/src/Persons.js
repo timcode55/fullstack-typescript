@@ -18,7 +18,7 @@ const Persons = ({ persons, filterName, handleDeleteRender }) => {
 		<div>
 			{namesToShow.map((item, i) => {
 				return (
-					<p key={item.name}>
+					<li className="note" key={item.name}>
 						{item.name} {item.number}{' '}
 						<button
 							onClick={() => {
@@ -28,7 +28,7 @@ const Persons = ({ persons, filterName, handleDeleteRender }) => {
 						>
 							Delete
 						</button>
-					</p>
+					</li>
 				);
 			})}
 		</div>
