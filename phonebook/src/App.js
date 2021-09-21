@@ -5,6 +5,7 @@ import Persons from './Persons';
 import axios from 'axios';
 
 import memberService from './services/members';
+import Notification from './Notification';
 
 const App = () => {
 	const [ persons, setPersons ] = useState([]);
@@ -12,6 +13,7 @@ const App = () => {
 	const [ newNumber, setNewNumber ] = useState('');
 	const [ filterName, setFilterName ] = useState('');
 	const [ updateRender, setUpdateRender ] = useState(false);
+	const [ errorMessage, setErrorMessage ] = useState('');
 
 	useEffect(
 		() => {
@@ -35,12 +37,32 @@ const App = () => {
 				const result = await axios
 					.get(`http://localhost:3001/persons`)
 					.then((response) => response.data.filter((item) => item.name === newName));
-				memberService.updatePerson(result[0].id, { name: newName, number: newNumber });
+				// .catch((error) => {
+				// 	alert(`Information on '${newName}' was already deleted from server`);
+				// });
+				if (result.length === 0) {
+					setErrorMessage(`Information on '${newName}' was already deleted from server`);
+					alert(`Information on '${newName}' was already deleted from server`);
+					setTimeout(() => {
+						setErrorMessage(null);
+					}, 3000);
+				} else {
+					memberService.updatePerson(result[0].id, { name: newName, number: newNumber });
+					setErrorMessage(`Added or Updated ${newName}`);
+					setTimeout(() => {
+						setErrorMessage(null);
+					}, 3000);
+				}
+
 				setUpdateRender(() => !updateRender);
 			};
 			findId();
 		} else {
 			memberService.createPerson({ name: newName, number: newNumber });
+			setErrorMessage(`Added or Updated ${newName}`);
+			setTimeout(() => {
+				setErrorMessage(null);
+			}, 3000);
 			setPersons([ ...persons, { name: newName, number: newNumber } ]);
 		}
 		setNewName('');
@@ -62,10 +84,10 @@ const App = () => {
 	const handleDeleteRender = (id) => {
 		setPersons([ ...persons.filter((item) => item.id !== id) ]);
 	};
-
 	return (
 		<div>
 			<h1>Phonebook</h1>
+			{errorMessage && <Notification message={errorMessage} />}
 			<Search persons={persons} filterName={filterName} handleFilterNames={handleFilterNames} />
 			<h1>Add A New Entry:</h1>
 			<PersonForm
