@@ -17,7 +17,7 @@ const App = () => {
 
 	useEffect(
 		() => {
-			axios.get('http://localhost:3001/persons').then((response) => {
+			axios.get('http://localhost:3001/api/persons').then((response) => {
 				setPersons(response.data);
 			});
 		},
@@ -35,7 +35,7 @@ const App = () => {
 			alert(`${newName} is already added to the phonebook, replace the old number with a new one?`);
 			const findId = async () => {
 				const result = await axios
-					.get(`http://localhost:3001/persons`)
+					.get(`http://localhost:3001/api/persons`)
 					.then((response) => response.data.filter((item) => item.name === newName));
 				// .catch((error) => {
 				// 	alert(`Information on '${newName}' was already deleted from server`);
@@ -81,8 +81,11 @@ const App = () => {
 		setFilterName(e.target.value.toLowerCase());
 	};
 
-	const handleDeleteRender = (id) => {
-		setPersons([ ...persons.filter((item) => item.id !== id) ]);
+	const handleDeleteRender = async (id) => {
+		await axios
+			.delete(`http://localhost:3001/api/persons/${id}`)
+			.then((response) => console.log(response.data, 'RESPONSE.DATAHDR'));
+		setUpdateRender(() => !updateRender);
 	};
 	return (
 		<div>
