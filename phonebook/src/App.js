@@ -86,7 +86,6 @@ const App = () => {
 		await axios.delete(`http://localhost:3001/api/persons/${id}`).then((response) => {});
 		setUpdateRender(() => !updateRender);
 	};
-	console.log(updateRender);
 	return (
 		<div>
 			<h1>Phonebook</h1>
