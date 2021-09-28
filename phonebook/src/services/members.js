@@ -5,8 +5,8 @@ const getAllPersons = () => {
 	return axios.get(baseUrl).then((response) => response.data);
 };
 
-const createPerson = (newObject) => {
-	axios.post(baseUrl, newObject).then((response) => response.data);
+const createPerson = async (newObject) => {
+	await axios.post(baseUrl, newObject).then((response) => response.data);
 };
 
 const updatePerson = (id, newObject) => {
@@ -14,7 +14,6 @@ const updatePerson = (id, newObject) => {
 };
 
 const deletePerson = ({ id }) => {
-	console.log(id, 'ID IN DELETEPERSON IN MEMBERS.JS');
 	axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
 };
 

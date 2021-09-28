@@ -49,6 +49,7 @@ const App = () => {
 				} else {
 					memberService.updatePerson(result[0].id, { name: newName, number: newNumber });
 					setErrorMessage(`Added or Updated ${newName}`);
+					setUpdateRender(() => !updateRender);
 					setTimeout(() => {
 						setErrorMessage(null);
 					}, 3000);
@@ -82,11 +83,10 @@ const App = () => {
 	};
 
 	const handleDeleteRender = async (id) => {
-		await axios
-			.delete(`http://localhost:3001/api/persons/${id}`)
-			.then((response) => console.log(response.data, 'RESPONSE.DATAHDR'));
+		await axios.delete(`http://localhost:3001/api/persons/${id}`).then((response) => {});
 		setUpdateRender(() => !updateRender);
 	};
+	console.log(updateRender);
 	return (
 		<div>
 			<h1>Phonebook</h1>
