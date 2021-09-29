@@ -17,7 +17,7 @@ const App = () => {
 
 	useEffect(
 		() => {
-			axios.get('http://localhost:3001/api/persons').then((response) => {
+			axios.get('http://localhost:3002/api/persons').then((response) => {
 				setPersons(response.data);
 			});
 		},
@@ -48,6 +48,10 @@ const App = () => {
 					}, 3000);
 				} else {
 					memberService.updatePerson(result[0].id, { name: newName, number: newNumber });
+					// .catch((error) => {
+					// 	// this is the way to access the error message
+					// 	console.log(error, 'ERRORUPDATEPERSON........');
+					// });
 					setErrorMessage(`Added or Updated ${newName}`);
 					setUpdateRender(() => !updateRender);
 					setTimeout(() => {
@@ -59,7 +63,14 @@ const App = () => {
 			};
 			findId();
 		} else {
-			memberService.createPerson({ name: newName, number: newNumber });
+			memberService.createPerson({ name: newName, number: newNumber }).catch((error) => {
+				// this is the way to access the error message
+				console.log(error.response.data.error, 'ERROR........');
+				setErrorMessage(`${error.response.data.error}`);
+				setTimeout(() => {
+					setErrorMessage(null);
+				}, 3000);
+			});
 			setErrorMessage(`Added or Updated ${newName}`);
 			setTimeout(() => {
 				setErrorMessage(null);
