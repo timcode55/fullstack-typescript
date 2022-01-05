@@ -1,5 +1,3 @@
-import { argv } from 'process';
-
 interface ExerciseFields {
   periodLength: number;
   trainingDays: number;
@@ -22,7 +20,6 @@ const parseArgs = (args: Array<number | string>): ExerciseFields => {
   });
   const final = Number(average) / training.length;
 
-  const trainingDays = args.length;
   return {
     periodLength: Number(args.length - 3),
     trainingDays: Number(training.length),
