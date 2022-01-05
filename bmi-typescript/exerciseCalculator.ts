@@ -7,7 +7,7 @@ interface ExerciseFields {
   rating: number;
   ratingDescription: string;
   target: number;
-  average: number;
+  average: any;
 }
 
 const parseArgs = (args: Array<number | string>): ExerciseFields => {
@@ -18,9 +18,9 @@ const parseArgs = (args: Array<number | string>): ExerciseFields => {
     return item !== '0';
   });
   const average = array.reduce((acc, val) => {
-    return (Number(acc) + Number(val)) / array.length;
+    return Number(acc) + Number(val);
   });
-  console.log(training, 'TRAININGDAYS');
+  const final = Number(average) / training.length;
 
   const trainingDays = args.length;
   return {
@@ -30,7 +30,7 @@ const parseArgs = (args: Array<number | string>): ExerciseFields => {
     rating: Number(args[2]),
     ratingDescription: 'not bad',
     target: Number(args[2]),
-    average: Number(average)
+    average: Number(final)
   };
 };
 
