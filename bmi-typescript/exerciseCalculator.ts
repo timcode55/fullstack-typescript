@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 interface ExerciseFields {
   periodLength: number;
   trainingDays: number;
@@ -8,7 +10,7 @@ interface ExerciseFields {
   average: any;
 }
 
-const parseArgs = (args: Array<number | string>): ExerciseFields => {
+export const parseArgs = (args: Array<number | string>): ExerciseFields => {
   if (args.length < 4) throw new Error('Not enough arguments');
   console.log(args.slice(2), 'ARGS');
   const array = args.slice(2);
@@ -20,7 +22,7 @@ const parseArgs = (args: Array<number | string>): ExerciseFields => {
   });
   const final = Number(average) / training.length;
 
-  return {
+  const body = {
     periodLength: Number(args.length - 3),
     trainingDays: Number(training.length),
     success: true,
@@ -29,6 +31,17 @@ const parseArgs = (args: Array<number | string>): ExerciseFields => {
     target: Number(args[2]),
     average: Number(final)
   };
+
+  axios({
+    method: 'POST',
+    url: `http://localhost:3003/exercises`,
+
+    data: {
+      daily_exercises: [1, 0, 2, 0, 3, 0, 2.5],
+      target: 2.5
+    }
+  });
+  return body;
 };
 
 try {

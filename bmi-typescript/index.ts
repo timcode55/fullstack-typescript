@@ -1,5 +1,9 @@
 import express from 'express';
 const app = express();
+const cors = require('cors');
+app.use(cors());
+app.use(express.json());
+import { parseArgs } from './exerciseCalculator';
 
 app.get('/ping', (_req, res) => {
   res.send('pong');
@@ -21,6 +25,17 @@ app.get('/bmi', (req, res) => {
     height: height,
     bmi: ''
   });
+});
+
+app.post('/exercises', (req, res) => {
+  const data = req.body.daily_exercises;
+  console.log(data, 'DATA');
+  // const value1 = Number(req.query.weight);
+  // const value2 = Number(req.query.height);
+
+  const result = parseArgs(data);
+
+  res.send(result);
 });
 
 const PORT = 3003;
